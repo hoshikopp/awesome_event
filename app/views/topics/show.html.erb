@@ -1,0 +1,88 @@
+<div class="page-header">
+  <h1>
+    <%= @topic.name %>
+  </h1>
+</div>
+
+<div class="row">
+  <div class="col-md-8">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        スレッド主
+      </div>
+      <div class="panel-body">
+          <%= link_to(url_for_twitter(@topic.owner)) do %>
+            <%= image_tag @topic.owner.image_url %>
+            <%= "@#{@topic.owner.nickname}" %>
+          <% end %>
+      </div>
+    </div>
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        スレッド名
+      </div>
+      <div class="panel-body">
+        <%= @topic.name %>
+      </div>
+    </div>
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        スレッドの説明
+      </div>
+      <div class="panel-body">
+        <%= @topic.content %>
+      </div>
+    </div>
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        投稿一覧
+      </div>
+      <div class="panel-body">
+        <ul>
+          <% @posts.each_with_index do |post,idx| %>
+            <li>
+              <%= link_to(url_for_twitter(post.user)) do %>
+              <%= idx + 1 %>. <%= "@#{post.user.nickname}" %> : <%= post.comment %>
+              <% end %>
+            </li>
+          <% end %>
+        </ul>
+      </div>
+    </div>
+  </div>
+ <div class="col-md-4">
+  <% if @topic.created_by?(current_user) %>
+    <%= link_to 'スレッドを編集する',edit_topic_path(@topic), class: 'btn btn-info btn-lg btn-block' %>
+    <%= link_to 'スレッドを削除する',topic_path(@topic), class: 'btn btn-danger btn-lg btn-block', method: :delete, data:{ confirm:'本当に削除しますか？'} %>
+  <% end %>
+ </div>
+
+ <hr>
+ <div class="row">
+   <div class="col-md-4">
+     <div class="panel panel-default">
+       <div class="panel-heading">
+         スレッドに投稿する
+       </div>
+      <div class="panel-body">
+      <%= form_for @newpost, :url => post_create_path do |f| %>
+        <% if @newpost.errors.any? %>
+          <div class="alert alert-danger">
+            <ul>
+            <% @newpost.errors.full_messages.each do |msg| %>
+              <li><%= msg %></li>
+            <% end %>
+            </ul>
+          </div>
+        <% end %>
+        <div class="form-group">
+          <%= f.label :"コメント" %>
+          <%= f.text_area :comment,class: 'form-control'%>
+        </div>
+        <%= f.submit '投稿', class: 'btn btn-default', date: { disable_with: '投稿中・・・' } %>
+      <% end %>
+      </div>
+     </div>
+    </div>
+  </div>
+</div>

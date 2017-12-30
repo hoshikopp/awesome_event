@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171228030118) do
+ActiveRecord::Schema.define(version: 20171229080200) do
 
   create_table "events", force: true do |t|
     t.integer  "owner_id"
@@ -26,6 +26,19 @@ ActiveRecord::Schema.define(version: 20171228030118) do
 
   add_index "events", ["owner_id"], name: "index_events_on_owner_id"
 
+  create_table "posts", force: true do |t|
+    t.integer  "user_id"
+    t.integer  "topic_id",   null: false
+    t.text     "comment"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "posts", ["topic_id", "user_id"], name: "index_posts_on_topic_id_and_user_id", unique: true
+  add_index "posts", ["topic_id"], name: "index_posts_on_topic_id"
+  add_index "posts", ["user_id", "topic_id"], name: "index_posts_on_user_id_and_topic_id", unique: true
+  add_index "posts", ["user_id"], name: "index_posts_on_user_id"
+
   create_table "tickets", force: true do |t|
     t.integer  "user_id"
     t.integer  "event_id",   null: false
@@ -38,6 +51,17 @@ ActiveRecord::Schema.define(version: 20171228030118) do
   add_index "tickets", ["event_id"], name: "index_tickets_on_event_id"
   add_index "tickets", ["user_id", "event_id"], name: "index_tickets_on_user_id_and_event_id", unique: true
   add_index "tickets", ["user_id"], name: "index_tickets_on_user_id"
+
+  create_table "topics", force: true do |t|
+    t.integer  "owner_id"
+    t.string   "name",       null: false
+    t.date     "save_date"
+    t.text     "content"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "topics", ["owner_id"], name: "index_topics_on_owner_id"
 
   create_table "users", force: true do |t|
     t.string   "provider",   null: false

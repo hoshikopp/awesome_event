@@ -3,7 +3,10 @@ class User < ActiveRecord::Base
 
   has_many :created_events, class_name: 'Event', foreign_key: :owner_id, dependent: :nullify
   has_many :tickets, dependent: :nullify
+  has_many :created_topics, class_name: 'Topic', foreign_key: :owner_id, dependent: :nullify
+  has_many :topics, dependent: :nullify
   has_many :participating_events, through: :tickets,source: :event
+  has_many :posts
 
   def self.find_or_create_from_auth_hash(auth_hash)
     provider = auth_hash[:provider]
