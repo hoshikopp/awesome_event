@@ -6,8 +6,9 @@ class PostsController < ApplicationController
   end
 
   def create
-    @post = Post.new(params[:post].permit(:id,:comment))
+    @topic = Topic.find(params[:post][:topic_id])
+    @post = Post.new(params[:post].permit(:id,:comment,:user_name,:topic_id))
     @post.save
-    redirect_to topic_path
+    redirect_to topic_path @topic
   end
 end

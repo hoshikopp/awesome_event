@@ -2,7 +2,7 @@ Rails.application.routes.draw do
   root to: 'welcome#index'
   get '/auth/:provider/callback' => 'sessions#create'
   get '/logout' => 'sessions#destroy', as: :logout
-  post 'posts/create' => 'posts#create', as: :post_create
+  post 'posts' => 'posts#create', as: :post_create
 
   resource :user do
     get 'retire'

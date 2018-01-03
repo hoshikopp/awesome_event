@@ -11,10 +11,14 @@
         スレッド主
       </div>
       <div class="panel-body">
-          <%= link_to(url_for_twitter(@topic.owner)) do %>
-            <%= image_tag @topic.owner.image_url %>
-            <%= "@#{@topic.owner.nickname}" %>
-          <% end %>
+        <% if @topic.owner %>
+            <%= link_to(url_for_twitter(@topic.owner)) do %>
+              <%= image_tag @topic.owner.image_url %>
+              <%= "@#{@topic.owner.nickname}" %>
+            <% end %>
+        <% else %>
+          退会したユーザー
+        <% end %>
       </div>
     </div>
     <div class="panel panel-default">
@@ -41,9 +45,7 @@
         <ul>
           <% @posts.each_with_index do |post,idx| %>
             <li>
-              <%= link_to(url_for_twitter(post.user)) do %>
-              <%= idx + 1 %>. <%= "@#{post.user.nickname}" %> : <%= post.comment %>
-              <% end %>
+              <%= idx + 1 %>.<%= post.user_name %>:<%= post.comment %>
             </li>
           <% end %>
         </ul>
@@ -56,9 +58,8 @@
     <%= link_to 'スレッドを削除する',topic_path(@topic), class: 'btn btn-danger btn-lg btn-block', method: :delete, data:{ confirm:'本当に削除しますか？'} %>
   <% end %>
  </div>
-
  <hr>
- <div class="row">
+ <div class="row comment-wrapper">
    <div class="col-md-4">
      <div class="panel panel-default">
        <div class="panel-heading">
@@ -66,6 +67,7 @@
        </div>
       <div class="panel-body">
       <%= form_for @newpost, :url => post_create_path do |f| %>
+      <%= f.hidden_field :topic_id %>
         <% if @newpost.errors.any? %>
           <div class="alert alert-danger">
             <ul>
@@ -75,12 +77,16 @@
             </ul>
           </div>
         <% end %>
-        <div class="form-group">
-          <%= f.label :"コメント" %>
-          <%= f.text_area :comment,class: 'form-control'%>
-        </div>
-        <%= f.submit '投稿', class: 'btn btn-default', date: { disable_with: '投稿中・・・' } %>
-      <% end %>
+          <div class="form-group">
+            <%= f.label :"投稿者名" %>
+            <%= f.text_area :user_name,class: 'form-control', rows: 1 %>
+          </div>
+          <div class="form-group">
+            <%= f.label :"コメント" %>
+            <%= f.text_area :comment,class: 'form-control'%>
+          </div>
+          <%= f.submit '投稿', class: 'btn btn-default', date: { disable_with: '投稿中・・・' } %>
+        　<% end %>
       </div>
      </div>
     </div>

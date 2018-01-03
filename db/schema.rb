@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171229080200) do
+ActiveRecord::Schema.define(version: 20180103135855) do
 
   create_table "events", force: true do |t|
     t.integer  "owner_id"
@@ -32,6 +32,7 @@ ActiveRecord::Schema.define(version: 20171229080200) do
     t.text     "comment"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "user_name"
   end
 
   add_index "posts", ["topic_id", "user_id"], name: "index_posts_on_topic_id_and_user_id", unique: true
